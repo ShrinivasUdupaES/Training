@@ -1,0 +1,254 @@
+1. Write a program that examines three variables—x, y, and z— and prints the largest odd number among them. 
+If none of them are odd, it should print a message to that effect.
+
+x = int(input("Enter x : "))
+y = int(input("Enter y : "))
+z = int(input("Enter z : "))
+
+m = 0
+a = [x,y,z]
+b = []
+for i in a:
+    if i%2 != 0:
+        b.append(i)
+        
+if len(b)>0:
+    for j in b:
+        if j > m:
+            m = j
+    print ("Max odd of x, y, z : ", m)
+    
+else:
+    print("No Odd numbers...")
+
+solutions:
+
+Enter x : 2                                                                                                                                              
+Enter y : 5                                                                                                                                              
+Enter z : 3                                                                                                                                              
+Max odd of x, y, z :  5  
+
+***************************************************************************************************
+2. Python provides a built-in function called len that returns the length of a string, so the value of len('Cigna') is 5. 
+Write a function named right_justify that takes a string named s as a parameter and prints the string with enough leading 
+spaces so that the last letter of the string is in column 70 of the display.
+>>> right_justify('Cigna')
+
+def right_justify(s):
+    for i in range(0, 70-len(s)):
+        print(end = " ")
+    print(s)
+    
+right_justify('Cigna')
+right_justify('Training')
+
+solution :
+
+                                                                 Cigna                                                                                   
+                                                              Training
+
+***************************************************************************************************
+3. Write a program that asks the user to input 10 integers, and then prints the largest odd number that was entered. 
+If no odd number was entered, it should print a message to that effect.
+
+a = []
+
+for i in range (1, 11):
+    y = int(input())
+    if y%2 != 0:
+        a.append(y)
+
+if len(a)>0:
+    for j in a:
+        m = max(a)
+    print("Maximum value is : ", m)
+
+else:
+    print ("No Odd numbers are available...")
+
+solution:
+
+2                                                                                                                                                          
+4                                                                                                                                                          
+6                                                                                                                                                          
+8                                                                                                                                                          
+6                                                                                                                                                          
+4                                                                                                                                                          
+26                                                                                                                                                         
+24                                                                                                                                                         
+26                                                                                                                                                         
+22                                                                                                                                                                                                                                                                                                                 
+No Odd numbers are available... 
+
+35131                                                                                                                                                      
+321                                                                                                                                                        
+2321651485                                                                                                                                                 
+32110200                                                                                                                                                   
+31535                                                                                                                                                      
+32121                                                                                                                                                      
+946876                                                                                                                                                     
+16                                                                                                                                                         
+32                                                                                                                                                         
+66                                                                                                                                                         
+Maximum value is :  2321651485 
+
+***************************************************************************************************
+4. Practice using the Python interpreter as a calculator:
+
+a) The volume of a sphere with radius r is 4/3pr3. What is the volume of a sphere with radius 5?
+Hint: 392.7 is wrong!
+
+import math
+print((4/3)*(math.pi)*(5**3))
+
+solution :
+523.5987755982989
+---------------------------------------------------------------------------------------------------
+b) Suppose the cover price of a book is Rs.24.95, but bookstores get a 40% discount. Shipping costs
+Rs.3 for the first copy and 0.75p for each additional copy. What is the total wholesale cost for
+60 copies?
+
+cost_price = 24.95*0.6
+shipping_cost = 3
+shipping_cost2 = 0.75
+total_cost = cost_price + shipping_cost + (cost_price+shipping_cost2)*59
+print ("Total cost of 60 copies:",'%.2f'%total_cost)
+
+solution :
+Total cost of 60 copies: 945.45
+---------------------------------------------------------------------------------------------------
+c) If I leave my house at 6:52 am and run 1 mile at an easy pace (8:15 per mile), then 3 miles at
+tempo (7:12 per mile) and 1 mile at easy pace again, what time do I get home for breakfast?
+
+start_time = (6*60 + 52)*60
+easy_pace_time = (8*60 + 15)*2 
+tempo_pace_time = (7*60 + 12)*3
+
+total_time = (start_time + easy_pace_time + tempo_pace_time)/3600
+breakfast_hour = int(total_time)
+
+breakfast_minute = (total_time - breakfast_hour)*60
+breakfast_minute2 = int(breakfast_minute)
+
+print("Breakfast time = {}:{}".format(breakfast_hour, breakfast_minute2))
+
+solution:
+Breakfast time = 7:30
+
+***************************************************************************************************
+5. Write a program that asks the user to enter an integer and prints two integers, root and pwr, 
+such that 0 < pwr < 6 and root**pwr is equal to the integer entered by the user. 
+If no such pair of integers exists, it should print a message to that effect.
+
+import math
+integer = int (input("Enter the integer : "))
+
+#print(float(math.sqrt(integer)))
+
+for root in range (0, integer):
+    for pwr in range (1, 6):
+        if (root**pwr) == integer:
+            print ("Root :", root,", Power :", pwr)
+        
+else:
+            print ("Entered integer doesn't have root and power...")
+
+***************************************************************************************************
+6. Let s be a string that contains a sequence of decimal numbers separated by commas, e.g., s = '1.23,2.4,3.123'. 
+Write a program that prints the sum of the numbers in s.
+
+s = '1.23,2.4,3.123'
+s1 = s.split(",")
+plus = 0
+
+for i in s1:
+    plus = plus + float(i)
+
+print('Sum = ',plus)  
+
+solution :
+Sum =  6.753
+
+***************************************************************************************************
+7. Write a function isIn() that accepts two strings as arguments and returns True if 
+either string occurs anywhere in the other, and False otherwise.
+Hint: you might want to use the built-in str operation in.
+
+def isIn(s1, s2):
+    if s1 in s2 or s2 in s1:
+        print("True")
+    else:
+        print("False")
+        
+s1 = str(input("Enter the first string : "))
+s2 = str(input("Enter the second string : "))
+isIn(s1, s2)
+
+solution :
+Enter the first string : us                                                                                                                              
+Enter the second string : udus                                                                                                                           
+True  
+
+***************************************************************************************************
+8. Implement a function that satisfies the specification. Use a try-except block.
+def getRatios(vect1, vect2):
+	"""Assumes: vect1 and vect2 are lists of equal length of numbers
+	Returns: a list containing the meaningful values of
+	vect1[i]/vect2[i]"""
+
+def getRatios(vect1, vect2):
+    ans = []
+    try:
+        for i in range(len(vect1)):
+            ans.append(vect1[i]/vect2[i])
+        
+    except ZeroDivisionError:
+        ans.append(float('nan'))
+    return ans
+        
+v1 = [12, 25.2, 36, 40]
+v2 = [6.0, 22, 3, 80]
+print(getRatios(v1,v2))
+
+solution: 
+[2.0, 1.1454545454545455, 12.0, 0.5]
+
+***************************************************************************************************
+
+9. Assume that we execute the following assignment statements: width = 17 height = 12.0 delimiter = '.' 
+For each of the following expressions, write the value of the expression and the type (of the value of the expression).
+>>> width/2
+>>> width/2.0
+>>> height/3
+>>> 1 + 2 * 5
+>>> delimiter * 5
+Use the Python interpreter to check your answers
+
+>>> a = 17/2
+>>> print(a)
+8
+>>> type(a)
+<type 'int'>
+>>> b = 17/2.0
+>>> print (b)
+8.5
+>>> type(b)
+<type 'float'>
+>>> c = 12.0/3
+>>> print(c)
+4.0
+>>> type(c)
+<type 'float'>
+>>> d = 1 + 2 * 5
+>>> print(d)
+11
+>>> type(d)
+<type 'int'>
+>>> e = '.' *5
+>>> print(e)
+.....
+>>> type(e)
+<type 'str'>  
+
+***************************************************************************************************
+                                                                                                                                         

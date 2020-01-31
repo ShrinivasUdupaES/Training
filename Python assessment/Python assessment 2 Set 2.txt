@@ -1,0 +1,214 @@
+1. The greatest common divisor (GCD) of a and b is the largest number that divides both of them with no remainder. 
+One way to find the GCD of two numbers is based on the observation that if r is the remainder when a is divided 
+by b, then gcd(a, b) = gcd(b, r). As a base case, we can use gcd(a, 0) = a. Write a function called gcd that takes
+parameters a and b and returns their greatest common divisor.
+
+def GCD(a, b):
+    if b == 0:
+        return a
+    r = a%b
+    return GCD(b, r)
+    
+a = int (input("Enter a: "))
+b = int (input("Enter b: "))
+print("The GCD of", a, "and", b, "is", GCD(a, b))
+
+solution:
+
+Enter a: 5456                                                                                                                                            
+Enter b: 2255                                                                                                                                            
+The GCD of 5456 and 2255 is 11 
+
+***************************************************************************************************
+2. A number, a, is a power of b if it is divisible by b and a/b is a power of b. 
+Write a function called is_power that takes parameters a and b and returns True if a is a power of b. 
+Note: you will have to think about the base case.
+
+def is_power(a, b):
+    if a == b:
+        return True
+    if a % b == 0 and is_power(a/b, b):
+        return True
+    else:
+        return False
+        
+a = int (input("Enter a: "))
+b = int (input("Enter b: "))        
+print (is_power(a, b))
+solution :
+
+Enter a: 27                                                                                                                                              
+Enter b: 3                                                                                                                                               
+True 
+
+Enter a: 14                                                                                                                                              
+Enter b: 2                                                                                                                                               
+False   
+
+***************************************************************************************************
+3. Observe the following function definitions. They Calculate the Factorial as per the Mathematical 
+definition 1! = 1 (n + 1)! = (n + 1) * n! Implement factI(n) as an Iterative Implementation & factR(n) 
+as a Recursive Implementation.
+
+def factI(n):
+    f = 1 
+    for i in range(1, n+1):
+        f = f * i
+    return f
+	
+def factR(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factR(n-1)
+        
+n = int (input("Enter n: "))
+print("Iterative factorial: ", factI(n))
+print("Recursive factorial: ", factR(n))
+
+solution:
+
+Enter n: 7                                                                                                                                               
+Iterative factorial:  5040                                                                                                                               
+Recursive factorial:  5040  
+
+***************************************************************************************************
+4. Write a program that computes the decimal equivalent of the binary number 10011?
+
+def btd(binary):
+    i=0
+    dec = 0
+    while (binary != 0):
+        a = binary % 10
+        dec = dec + (a*(2**i))
+        i += 1
+        binary = binary//10
+    return dec
+
+b = int(input("Enter the binary number: "))
+print("Decimal equivalent of",b,"=", btd(b))
+
+solution:
+Enter the binary number: 10011                                                                                                                           
+Decimal equivalent of 10011 = 19
+
+***************************************************************************************************
+5. Implement a function that meets the specification below. Use a try-except block.
+
+def sumDigits(s):
+    d = "0123456789"
+    ss = 0
+    for i in s:
+        if i in d:
+            ss = ss + int(i)
+    return ss
+
+s = str(input("Enter the string: "))
+print("Sum of digits in the string = ", sumDigits(s))
+
+solution:
+
+Enter the string: a2b3c                                                                                                                                  
+Sum of digits in the string =  5 
+
+***************************************************************************************************
+6. Implement a function that satisfies the specification. Use a try-except block.
+
+def findAnEven(l):
+    try:
+        for i in l:
+            if i%2 == 0:
+                print (i)
+                break
+    except:
+        print ("No Even numbers")
+        
+l = [5, 9, 821, 56, 80]
+
+findAnEven(l)
+
+solution: 
+56
+
+***************************************************************************************************
+7. A palindrome is a word that is spelled the same backward and forward, like "Malayalam" and "Noon" . 
+Recursively, a word is a palindrome if the first and last letters are the same and the middle is a palindrome. 
+Write a function called is_palindrome that takes a string argument and returns True if it is a palindrome and False otherwise. 
+Remember that you can use the built-in function len to check the length of a string. Use the function definition
+
+def isPalindrome(s):
+    ss = 'abcdefghijklmnopqrstuvwxyz'
+    s1 = s.lower()
+    s2 = ''
+    for i in s1:
+        if i in ss:
+            s2 = s2 + i
+            
+    s3 = s2[-1::-1]
+    if s3 == s2:
+        return "Given string is a Palindrome"
+    else:
+        return "Given string is Not a Palindrome"
+        
+s = str(input("Enter a string: "))
+print(isPalindrome(s))
+
+*******************************************************************************
+
+8. Write a function called eval_loop that iteratively prompts the user, takes the resulting input and evaluates 
+it using eval, and prints the result. It should continue until the user enters 'done', and then return the value of 
+the last expression it evaluated.
+
+def eval_loop():
+    m = input("Do you like to proceed? (Y/n) : ")
+    
+    i=0
+    if (m == 'Y' or m == 'y'):
+        s = str(input("Enter the expression: "))
+        print(eval(s))
+        eval_loop()
+    else:
+        print("Thanks for visiting...")
+    
+eval_loop()
+
+*******************************************************************************
+
+9. One way of computing square roots is Newton’s method. Suppose that you want to know the square root of a. 
+If you start with almost any estimate, x, you can compute a better estimate with the following formula: y = (x + a/x)/2
+
+import math
+
+def NewtonSqrt(n):
+    n = float(n)
+    x = n/2
+    for i in range (0,10):
+        y = (x + n/x) / 2
+        x = y
+    return y
+    
+print("Number   |   NewtonSqrt  |   math.sqr    |   Difference  ")
+print("---------|---------------|---------------|---------------")
+
+for i in range(1,10):
+    nw = NewtonSqrt(i)
+    sq = math.sqrt(i)
+    dif = abs(nw - sq)
+    print(i,"\t |", "%.10f"%nw," |", "%.10f"%sq," |", dif)
+
+solution : 
+
+Number   |   NewtonSqrt  |   math.sqr    |   Difference                                                                                   
+---------|---------------|---------------|---------------                                                                                 
+1        | 1.0000000000  | 1.0000000000  | 0.0                                                                                            
+2        | 1.4142135624  | 1.4142135624  | 2.220446049250313e-16                                                                          
+3        | 1.7320508076  | 1.7320508076  | 0.0                                                                                            
+4        | 2.0000000000  | 2.0000000000  | 0.0                                                                                            
+5        | 2.2360679775  | 2.2360679775  | 0.0                                                                                            
+6        | 2.4494897428  | 2.4494897428  | 0.0                                                                                            
+7        | 2.6457513111  | 2.6457513111  | 0.0                                                                                            
+8        | 2.8284271247  | 2.8284271247  | 4.440892098500626e-16                                                                          
+9        | 3.0000000000  | 3.0000000000  | 0.0  
+
+*******************************************************************************
+*******************************************************************************
