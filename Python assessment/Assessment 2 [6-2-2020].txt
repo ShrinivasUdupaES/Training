@@ -1,0 +1,62 @@
+1. Will a(2) or x(2) woork for lambda function?
+
+a = lambda x: x * x
+print(a(2))
+
+o/p: 4
+it works for a(2) but x(2) does not works, showing x is not defined.
+
+------------------------------------------------
+
+2. Will it work?
+
+a = (lambda x: x * x)(2)
+print(a)
+
+o/p: 4
+Yes, it will works.
+
+------------------------------------------------
+
+3. Lambda and map on inbuilt function.
+
+l1 = [1, 2, 3, 4, 5]
+l2 = [5, 4, 3, 2, 3]
+p = list(map(lambda a, b: pow(a, b), l1, l2))
+print(p)
+
+o/p: [1, 16, 27, 16, 125]
+Yes, it will works.
+
+------------------------------------------------
+
+6. return x if even else return not % by 2.
+
+l1 = [1, 2, 3, 4, 5]
+
+a = list(map(lambda x: x if x % 2 == 0 else 'not % by 2', l1))
+
+print(a)
+
+o/p: ['not % by 2', 2, 'not % by 2', 4, 'not % by 2']
+
+------------------------------------------------
+
+7. Unequal length of list.
+
+l1 = [1, 2, 3, 4, 5]
+l2 = [5, 24, 13, 8]
+
+ab = list(map(lambda a, b: a + b, l1, l2))
+
+print(ab)
+
+o/p: [6, 26, 16, 12]
+
+------------------------------------------------
+5. Accumulate function.
+
+l1 = [1, 2, 3, 4, 5]
+
+a = list(itertools.accumulate(l1, lambda ac, b: ac+b))
+print(a)
