@@ -60,3 +60,11 @@ l1 = [1, 2, 3, 4, 5]
 
 a = list(itertools.accumulate(l1, lambda ac, b: ac+b))
 print(a)
+
+------------------------------------------------
+
+4.
+def asd(x,y):
+    return pow(x,y)
+print(list(map(pow,a,b)))
+print(list(map(asd,a,b)))
