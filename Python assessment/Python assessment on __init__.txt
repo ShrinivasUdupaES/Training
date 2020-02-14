@@ -1,0 +1,25 @@
+import math
+class point:
+    def __init__(self, a=0, b=0):
+        self.a = a
+        self.b = b
+    
+    def pt(self):
+        d =  math.sqrt((self.a)**2 + (self.b)**2)
+        return d
+    
+    def twopt(self, p1, p2):
+        d3 =  math.sqrt((p2.a-p1.a)**2 + (p2.b-p1.b)**2)
+        return d3
+    
+    def midpt(self, p1, p2):
+        d1 = (p2.a+p1.a)/2 
+        d2 = (p2.b+p1.b)/2
+        return d1, d2
+
+p1 = point(4,5)
+p2 = point(7,9)
+p = point()
+print(p1.pt())
+print(p.twopt(p1,p2))
+print(p.midpt(p1,p2))

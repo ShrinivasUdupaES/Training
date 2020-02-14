@@ -1,0 +1,40 @@
+def encr(s):
+    alp = 'abcdefghijklmnopqrstuvwxyz'
+    s1 = s.lower()
+    s2 = ''
+    
+    for i in s1:
+        if i in alp:
+            if i == 'y':
+                c = 'a'
+            elif i == 'z':
+                c = 'b'
+            else:
+                n = ord(i)+2
+                c = chr(n)
+            s2 = s2 + c
+        else:
+            s2 = s2 + i
+    return s2
+
+s = str(input("Enter the string to be encrypted: "))
+print(encr(s))
+***************************************************************************************************
+
+dic = {'ONE':1, 'TWO':2, 'THREE':3, 'FOUR':4, 'FIVE':5, 'SIX':6, 'SEVEN':7, 'EIGHT':8, 'NINE':9, 'ADD':'+', 'SUB':'-', 'MUL':'*', 'DIV':'/'}
+
+exp = str(input("Enter the expression: "))
+s = exp.split(' ')
+s1 = ''
+for i in s:
+    s1 = s1 + str(dic[i])
+    
+y = eval(s1)
+
+for x, z in dic.items():
+    if y == z:
+        print(exp,"=",x)
+
+solution: 
+Enter the expression: THREE DIV THREE                                                                                                                    
+THREE DIV THREE = ONE  
