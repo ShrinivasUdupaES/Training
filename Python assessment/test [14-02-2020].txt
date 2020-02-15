@@ -1,0 +1,95 @@
+1.
+
+n = int(input())
+a = []
+b = {}
+for i in range(n):
+    a.append(input())
+b1 = set(a)
+print(len(b1))
+
+for i in b1:
+    print(a.count(i), end=' ')
+
+-----------------------------------------------------------
+2. 
+from functools import reduce
+from math import gcd
+
+n = int(input())
+num = []
+den = []
+
+for i in range(n):
+    num.append(int(input()))
+    den.append(int(input()))
+numerator = reduce(lambda x, y: x * y, num)
+denominator = reduce(lambda x, y: x * y, den)
+g_cd = reduce(gcd, [numerator, denominator])
+print(int(numerator / g_cd), int(denominator / g_cd))
+
+-----------------------------------------------------------
+3. 
+
+import re
+n = int(input())
+g = list()
+for i in range(n):
+    g.append(input())
+print(sorted(list(filter(lambda x: re.search(r'([a-z|A-Z|0-9|_|-]+)[@]([a-z|A-Z|0-9]+)[.]([a-z]+)', x), g))))
+
+-----------------------------------------------------------
+5.
+
+n = int(input())
+name = []
+m = []
+p = []
+c = []
+for i in range(n):
+    name.append(str(input()))
+    m.append(input())
+    p.append(input())
+    c.append(input())
+marks = zip(p, c, m)
+details = dict(zip(name, marks))
+
+k_name = str(input())
+
+for k, v in details.items():
+    if k == k_name:
+        for i in range(0, len(v)):
+            avrg = (int(v[0]) + int(v[1]) + int(v[2])) / 3
+
+print(avrg)
+# print('{0:.2f}'.format(avrg))
+
+-----------------------------------------------------------
+7. 
+
+a = [1, 2]
+b = [3, 4]
+
+a.sort()
+b.sort()
+
+for i in range(len(a)):
+    for j in range(len(b)):
+        print('(',a[i],',',b[j],')',end=' ')
+
+
+-----------------------------------------------------------
+8.
+
+n = int(input())
+room = input('Enter room numbers: ')
+
+room_list = room.split(' ')
+room_set = set(room_list)
+
+for room_num in room_set:
+    if room_list.count(room_num) == 1:
+        print(room_num)
+
+-----------------------------------------------------------
+
