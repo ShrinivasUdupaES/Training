@@ -39,6 +39,15 @@ for i in range(n):
 print(sorted(list(filter(lambda x: re.search(r'([a-z|A-Z|0-9|_|-]+)[@]([a-z|A-Z|0-9]+)[.]([a-z]+)', x), g))))
 
 -----------------------------------------------------------
+4. 
+def palindrome(N):
+    for i in range(1, N + 1):
+        print(int('1' * i) ** 2)
+
+
+palindrome(int(input()))
+
+-----------------------------------------------------------
 5.
 
 n = int(input())
