@@ -1,0 +1,20 @@
+12:45:59 - Database connection established successful with server address and host
+12:45:59 - query 1 executed successfully
+12:45:59 - query 2 executed successfully
+12:46:19 - user input for query 3 taken
+12:46:19 - query 3 executed successfully
+12:46:28 - user input for query 3 taken
+12:46:28 - query 1 executed successfully
+12:52:11 - Database connection established successful with server address and host
+12:52:11 - query 1 executed successfully
+12:52:11 - query 2 executed successfully
+12:52:18 - user input for query 3 taken
+12:52:18 - query 3 executed successfully
+12:52:25 - user input for query 3 taken
+12:52:25 - query 4 executed successfully
+2020-02-21 12:54:00 - Database connection established successful with server address and host
+2020-02-21 12:54:00 - query 1 executed successfully
+2020-02-21 12:54:00 - query 2 executed successfully
+2020-02-21 13:02:16 - Database connection established successful with server address and host
+2020-02-21 13:02:16 - Printing maximum - sold product with product details executed successfully
+2020-02-21 13:02:16 - Printing minimum - sold product with product details executed successfully
