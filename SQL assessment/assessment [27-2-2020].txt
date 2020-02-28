@@ -58,7 +58,21 @@ branches int(3)
 1. Fetch publisher information who have publish_city <> author_city and check if publish_city = author_country.
 display the correct publisher_city along with other publisher information based on author_city
 
+select p.publish_id, p.publish_name,
+case 
+when p.publish_city = a.author_country then a.author_city
+end as p_city,
+p.publish_start_date, p.branches
+from publish p
+join author a
+on p.publish_city <> a.author_city
+where p.publish_city = a.author_country;
 
++------------+--------------------------+---------+--------------------+----------+
+| publish_id | publish_name             | p_city  | publish_start_date | branches |
++------------+--------------------------+---------+--------------------+----------+
+| PB02       | Summer Night Publication | Toronto | 2019-08-31         |       25 |
++------------+--------------------------+---------+--------------------+----------+
 
 ***************************************************************************************************
 2. Fetch authors_name, author_country, publish_city, publish_start_date, branches who have 
@@ -88,6 +102,31 @@ group by p.publish_start_date;
 +----------------+----------------+--------------+--------------------+----------+
 
 ***************************************************************************************************
+
+3. Fetch publisher details who have authors in same city and get corresponding author details who 
+belong to same country
+
+select p.*, a.*
+from publish p
+join author a
+on p.publish_city = a.author_city
+where a.author_country in
+(select a.author_country
+from publish p
+join author a
+on p.publish_city = a.author_city)
+order by p.publish_id;
+
++------------+----------------------+--------------+--------------------+----------+-----------+--------------+----------------+-------------+------------+
+| publish_id | publish_name         | publish_city | publish_start_date | branches | AUTHOR_ID | AUTHOR_NAME  | AUTHOR_COUNTRY | AUTHOR_CITY | PUBLISH_ID |
++------------+----------------------+--------------+--------------------+----------+-----------+--------------+----------------+-------------+------------+
+| PB01       | Jex Max Publication  | Berlin       | 1929-04-21         |       10 | AUT007    | E. Howard    | EUROPE         | Berlin      | PB03       |
+| PB01       | Jex Max Publication  | Berlin       | 1929-04-21         |       10 | AUT008    | Andrew Jeff  | GERMANY        | Berlin      | PB02       |
+| PB03       | Novel Publisher Ltd. | London       | 2018-08-10         |       11 | AUT006    | Butler Andre | UK             | London      | PB03       |
+| PB04       | Mark Book Sales      | New Jersy    | 2008-05-24         |        9 | AUT010    | Mary Coffing | USA            | New Jersy   | PB04       |
++------------+----------------------+--------------+--------------------+----------+-----------+--------------+----------------+-------------+------------+
+
+***************************************************************************************************
 4. Fetch authors who have incorrect author_country for same author_city. Display correct author_country along with all author_information
 
 select *,
@@ -111,6 +150,26 @@ from author;
 | AUT009    | Drek Tailor          | Australia      | Melbourne     | PB01       | Australia       |
 | AUT010    | Mary Coffing         | USA            | New Jersy     | PB04       | USA             |
 +-----------+----------------------+----------------+---------------+------------+-----------------+
+
+***************************************************************************************************
+
+5. Fetch authors who do not have publisher from their country.
+
+select a.* from author a
+where a.author_country not in
+(select a.author_country
+from author a
+join publish p
+on a.author_city = p.publish_city);
+
++-----------+----------------------+----------------+-------------+------------+
+| AUTHOR_ID | AUTHOR_NAME          | AUTHOR_COUNTRY | AUTHOR_CITY | PUBLISH_ID |
++-----------+----------------------+----------------+-------------+------------+
+| AUT003    | John Betjeman Hunter | RUSSIA         | Moscow      | PB01       |
+| AUT004    | John Betjeman Hunter | CANADA         | Toronto     | PB03       |
+| AUT005    | S.B.Swaminathan      | INDIA          | Delhi       | PB01       |
+| AUT009    | Drek Tailor          | Australia      | Melbourne   | PB01       |
++-----------+----------------------+----------------+-------------+------------+
 
 ***************************************************************************************************
 
