@@ -1,0 +1,252 @@
+CREATE TABLE TRIP
+(
+TRIP_ID VARCHAR(10),
+TRIP_SOURCE VARCHAR(10),
+TRIP_DESTINATION VARCHAR(10),
+TRIP_START_TIME TIME,
+TRIP_END_TIME TIME,
+TRIP_COST INT,
+DYNAMIC_FARE VARCHAR(10)
+);
+
+INSERT INTO TRIP VALUES
+('TP01','CHN','BGL','13:40','15:40',3500,'Y'),
+('TP02','BGL','MUM','18:20','19:20',6700,'Y'),
+('TP03','CHN','HYD','9:45','11:10',3000,'Y'),
+('TP04','HYD','BGL','12:20','13:25',2700,'N'),
+('TP05','MUM','NDL','23:00','1:25',4500,'Y'),
+('TP06','BGL','NDL','19:40','22:10',5000,'N'),
+('TP07','NDL','MUM','16:45','17:50',6000,'Y'),
+('TP08','MUM','BGL','20:20','23:45',5000,'N'),
+('TP09','NDL','HYD','11:25','13:45',3000,'N'),
+('TP10','HYD','CHN','20:30','22:20',4500,'Y'),
+('TP11','BGL','CHN','23:45','1:05',3900,'Y');
+
+select * from trip;
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+
+| TRIP_ID | TRIP_SOURCE | TRIP_DESTINATION | TRIP_START_TIME | TRIP_END_TIME | TRIP_COST | DYNAMIC_FARE |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+
+| TP01    | CHN         | BGL              | 13:40:00        | 15:40:00      |      3500 | Y            |
+| TP02    | BGL         | MUM              | 18:20:00        | 19:20:00      |      6700 | Y            |
+| TP03    | CHN         | HYD              | 09:45:00        | 11:10:00      |      3000 | Y            |
+| TP04    | HYD         | BGL              | 12:20:00        | 13:25:00      |      2700 | N            |
+| TP05    | MUM         | NDL              | 23:00:00        | 01:25:00      |      4500 | Y            |
+| TP06    | BGL         | NDL              | 19:40:00        | 22:10:00      |      5000 | N            |
+| TP07    | NDL         | MUM              | 16:45:00        | 17:50:00      |      6000 | Y            |
+| TP08    | MUM         | BGL              | 20:20:00        | 23:45:00      |      5000 | N            |
+| TP09    | NDL         | HYD              | 11:25:00        | 13:45:00      |      3000 | N            |
+| TP10    | HYD         | CHN              | 20:30:00        | 22:20:00      |      4500 | Y            |
+| TP11    | BGL         | CHN              | 23:45:00        | 01:05:00      |      3900 | Y            |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+
+
+***************************************************************************************************
+1. Fetch itinerary details from CHN to NDL which are cheaper
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+min(t1.trip_cost+t2.trip_cost) as cost
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'CHN' and t2.trip_destination = 'NDL')
+;
+
++---------+--------+-------------+-----------------+---------------+------+
+| trip_id | source | destination | trip_start_time | trip_end_time | cost |
++---------+--------+-------------+-----------------+---------------+------+
+| TP01    | CHN    | NDL         | 13:40:00        | 22:10:00      | 8500 |
++---------+--------+-------------+-----------------+---------------+------+
+ 
+***************************************************************************************************
+2. Fetch itinerary details from CHN to NDL which have less travel time
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+min(time(timediff(t1.trip_end_time, t1.trip_start_time) + timediff(t2.trip_end_time, t2.trip_start_time))) as journey_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where t1.trip_source <> t2.trip_destination
+and (t1.trip_source= 'CHN' and t2.trip_destination = 'NDL')
+;
+
++---------+--------+-------------+-----------------+---------------+-----------+--------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | journey_time |
++---------+--------+-------------+-----------------+---------------+-----------+--------------+
+| TP01    | CHN    | NDL         | 13:40:00        | 22:10:00      |      8500 | 04:30:00     |
++---------+--------+-------------+-----------------+---------------+-----------+--------------+
+
+***************************************************************************************************
+3. Fetch itinerary details from CHN to NDL which have less dynamic pricing(assume current_date = 'Sunday')
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+t1.dynamic_fare,
+min(time(timediff(t1.trip_end_time, t1.trip_start_time) + timediff(t2.trip_end_time, t2.trip_start_time))) as journey_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'CHN' and t2.trip_destination = 'NDL')
+and t1.dynamic_fare = 'Y'
+;
+
++---------+--------+-------------+-----------------+---------------+-----------+--------------+--------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | dynamic_fare | journey_time |
++---------+--------+-------------+-----------------+---------------+-----------+--------------+--------------+
+| TP01    | CHN    | NDL         | 13:40:00        | 22:10:00      |      8500 | Y            | 04:30:00     |
++---------+--------+-------------+-----------------+---------------+-----------+--------------+--------------+
+
+***************************************************************************************************
+4. Fetch itinerary details from CHN to NDL which happens on same day
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+time(timediff(t2.trip_end_time, t1.trip_start_time)) as actual_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'CHN' and t2.trip_destination = 'NDL')
+and time(timediff(t2.trip_end_time, t1.trip_start_time)) < time('23:59:59') 
+;
+
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | actual_time |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| TP01    | CHN    | NDL         | 13:40:00        | 22:10:00      |      8500 | 08:30:00    |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+
+***************************************************************************************************
+5. Fetch itinerary details from CHN to NDL which have mimum wait time at transit
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+min(time(timediff(t2.trip_start_time, t1.trip_end_time))) as wait_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'CHN' and t2.trip_destination = 'NDL')
+;
+
++---------+--------+-------------+-----------------+---------------+-----------+-----------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | wait_time |
++---------+--------+-------------+-----------------+---------------+-----------+-----------+
+| TP01    | CHN    | NDL         | 13:40:00        | 22:10:00      |      8500 | 04:00:00  |
++---------+--------+-------------+-----------------+---------------+-----------+-----------+
+
+***************************************************************************************************
+6. Fetch return itinerary details from NDL to CHN with mimum transits
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+min(time(timediff(t2.trip_end_time, t1.trip_start_time))) as actual_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'NDL' and t2.trip_destination = 'CHN')
+;
+
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | actual_time |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| TP09    | NDL    | CHN         | 11:25:00        | 22:20:00      |      7500 | 10:55:00    |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+
+***************************************************************************************************
+7. Fetch itinerary details from CHN to BGL before 11 AM
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+time(timediff(t2.trip_end_time, t1.trip_start_time)) as actual_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'CHN' and t2.trip_destination = 'BGL')
+and t1.trip_start_time between '00:00:00' and '11:00:00' ;
+
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | actual_time |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| TP03    | CHN    | BGL         | 09:45:00        | 13:25:00      |      5700 | 03:40:00    |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+
+***************************************************************************************************
+8. Fetch return itinerary details from NDL to CHN which happens on same day or which has less travel time
+
+select t1.trip_id, t1.trip_source as source, 
+t2.trip_destination as destination,
+t1.trip_start_time, t2.trip_end_time,
+(t1.trip_cost + t2.trip_cost) as trip_cost,
+time(timediff(t2.trip_end_time, t1.trip_start_time)) as actual_time
+from trip t1
+join trip t2
+on t1.trip_destination = t2.trip_source
+where (t1.trip_source= 'NDL' and t2.trip_destination = 'CHN')
+and time(timediff(t2.trip_end_time, t1.trip_start_time)) > time('00:00:00');
+
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| trip_id | source | destination | trip_start_time | trip_end_time | trip_cost | actual_time |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+| TP09    | NDL    | CHN         | 11:25:00        | 22:20:00      |      7500 | 10:55:00    |
++---------+--------+-------------+-----------------+---------------+-----------+-------------+
+
+***************************************************************************************************
+9. Fetch trip details which have less travel time
+
+select *, timediff(TRIP_END_TIME, TRIP_START_TIME) as journey_time 
+from trip 
+where timediff(TRIP_END_TIME, TRIP_START_TIME) = 
+( select min(timer) from 
+	( select *,
+	case 
+		when timediff(TRIP_END_TIME, TRIP_START_TIME) < 0 then time(timediff('24:00:00', TRIP_START_TIME) + TRIP_END_TIME)
+		else timediff(TRIP_END_TIME, TRIP_START_TIME) 
+	end
+	as timer
+	from trip
+	) as t
+);
+
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+| TRIP_ID | TRIP_SOURCE | TRIP_DESTINATION | TRIP_START_TIME | TRIP_END_TIME | TRIP_COST | DYNAMIC_FARE | journey_time |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+| TP02    | BGL         | MUM              | 18:20:00        | 19:20:00      |      6700 | Y            | 01:00:00     |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+
+***************************************************************************************************
+10. Fetch trip details which have high travel time and no dynamic pricing
+
+select *, timediff(TRIP_END_TIME, TRIP_START_TIME) as journey_time 
+from trip 
+where timediff(TRIP_END_TIME, TRIP_START_TIME) = 
+( select max(timer) from 
+	( select *,
+	case 
+		when timediff(TRIP_END_TIME, TRIP_START_TIME) < 0 then time(timediff('24:00:00', TRIP_START_TIME) + TRIP_END_TIME)
+		else timediff(TRIP_END_TIME, TRIP_START_TIME) 
+	end
+	as timer
+	from trip
+	) as t
+)
+and DYNAMIC_FARE = 'N';
+
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+| TRIP_ID | TRIP_SOURCE | TRIP_DESTINATION | TRIP_START_TIME | TRIP_END_TIME | TRIP_COST | DYNAMIC_FARE | journey_time |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+| TP08    | MUM         | BGL              | 20:20:00        | 23:45:00      |      5000 | N            | 03:25:00     |
++---------+-------------+------------------+-----------------+---------------+-----------+--------------+--------------+
+
+***************************************************************************************************
