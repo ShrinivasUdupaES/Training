@@ -1,0 +1,28 @@
+2. Proficiency
+
+select * from
+(select candidate_id, skill, proficiency from emp where candidate_id=101 
+union 
+select t1.candidate_id, t2.skill, case when t2.proficiency is NOT NULL then "NA" end as proficiency from 
+(select * from emp
+where skill not in (select skill from emp where candidate_id = 101)) as t2 
+join 
+(select candidate_id , skill from emp where candidate_id=101) as t1)tt
+union
+select * from (select candidate_id,skill,proficiency from emp where candidate_id=102 
+union 
+select t1.candidate_id,t2.skill, case when t2.proficiency is NOT NULL then "NA" end as proficiency from 
+(select * from emp
+where skill not in (select skill from emp where candidate_id = 102)) as t2 
+join 
+(select candidate_id , skill from emp where candidate_id=102) as t1)t;
+
+
+101	Hadoop	P1
+101	SQL	P2
+101	Oracle	NA
+102	Oracle	P3
+102	Hadoop	NA
+102	SQL	NA
+
+------------------------
